@@ -169,7 +169,7 @@ func (t *Transit) Transit() error {
 	return nil
 }
 
-// copySed fork from io.Copy(), but will do sed-like substitution
+// copySed forked from io.Copy(), but will do sed-like substitution
 func copySed(w io.Writer, r io.Reader, delim byte, pattern string, replace []byte) (written int64, err error) {
 	src := bufio.NewReader(r)
 	dst := w
