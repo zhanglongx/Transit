@@ -2,7 +2,7 @@
 
 Transit is a package for TCP forwarding
 
-It's different from gerneral TCP proxy forwarding tools, such as
+It's different from general TCP proxy forwarding tools, such as
 Nginx reverse proxy. Transit's behaviors are more like a TCP listener.
 Unlike Nginx which can only perform one-direction TCP forwarding, Transit
 can perform two-directions TCP forwarding.
@@ -28,9 +28,9 @@ downstream. However, unlike above, Transit will not forward to 3rd-party host.
 ## Configure file
 
 key | value
-----| -----
+---- | -----
 IPArray | DownStream([0]) and UpStream([1]) IP
-ThirdPartyAddr | 3rd-party IP in form "xx.xx.xx.xxx:xxx"
+ThirdPartyAddr | 3rd-party IP in form "xx.xx.xx.xx:xxx"
 IP | Bind-IP
 Port | Bind-Port
 
