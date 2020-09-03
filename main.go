@@ -1,33 +1,39 @@
 package main
 
 import (
-	"net"
+	"encoding/json"
+	"flag"
+	"fmt"
+	"io/ioutil"
+	"os"
 
 	"github.com/zhanglongx/Transit/transit"
 )
 
 func main() {
 
-	transit := transit.Transit{
-		IPArray: [2]net.IP{
-			net.IPv4(11, 11, 11, 104),
-			net.IPv4(11, 11, 11, 106),
-		},
+	confFile := flag.String("f", "/usr/local/etc/transit.json", "configure file name")
 
-		ThirdPartyAddr: "11.11.11.104:8001",
+	flag.Parse()
 
-		IP: net.IPv4(11, 11, 11, 109),
+	if _, err := os.Stat(*confFile); os.IsNotExist(err) {
+		fmt.Printf("%s not exists\n", *confFile)
+		os.Exit(1)
+	}
 
-		Port: 7001,
+	buf, err := ioutil.ReadFile(*confFile)
+	if err != nil {
+		fmt.Printf("read %s failed\n", *confFile)
+	}
+
+	var transit transit.Transit
+	if err := json.Unmarshal(buf, &transit); err != nil {
+		fmt.Printf("parse config file:%s failed\n", *confFile)
 	}
 
 	if err := transit.Open(); err != nil {
 		panic(err)
 	}
 
-	go transit.Transit()
-
-	for {
-
-	}
+	transit.Transit()
 }
