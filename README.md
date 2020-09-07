@@ -20,6 +20,9 @@ downstream. However, unlike above, Transit will not forward to 3rd-party host.
 
     DownStream <- Transit <- Upstream
 
+Transit also supports replacement of the forwarded content(experimental). It uses the
+Google re2 syntax (https://github.com/google/re2/wiki/Syntax).
+
 ## Usage
 
     Usage of transit.exe:
@@ -33,6 +36,8 @@ IPArray | DownStream([0]) and UpStream([1]) IP
 ThirdPartyAddr | 3rd-party IP in form "xx.xx.xx.xx:xxx"
 IP | Bind-IP
 Port | Bind-Port
+Pattern | Pattern of replacement (Google re2)
+Replace | Replace
 
 Example:
 
@@ -44,4 +49,6 @@ Example:
       "ThirdPartyAddr": "11.11.11.104:8001",
       "IP": "11.11.11.109",
       "Port": 7001
+      "Pattern": "(serverip=)'\\d+\\.\\d+\\.\\d+\\.\\d+'",
+      "Replace": "$1'11.11.11.109'"
     }

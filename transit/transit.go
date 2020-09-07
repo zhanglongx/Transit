@@ -32,6 +32,10 @@ import (
 // downstream. However, unlike above, Transit will not forward to 3rd-party host.
 //
 // DownStream <- Transit <- Upstream
+//
+// Transit also supports replacement of the forwarded content(experimental). It uses the
+// Google re2 syntax (https://github.com/google/re2/wiki/Syntax).
+//
 
 // Transit main struct
 type Transit struct {
@@ -47,6 +51,12 @@ type Transit struct {
 
 	// Port is the interface listen Port
 	Port int
+
+	// Pattern is the replacement pattern
+	Pattern string
+
+	// Replace is the replacement content
+	Replace string
 
 	// ln is the opened listener
 	ln net.Listener
@@ -133,8 +143,8 @@ func (t *Transit) Transit() error {
 				writers = append(writers, dstConn1)
 			}
 
-			pattern := `(serverip=)'\d+\.\d+\.\d+\.\d+'`
-			replace := []byte(fmt.Sprintf("$1'%s'", t.IP))
+			pattern := t.Pattern
+			replace := []byte(t.Replace)
 
 			if _, err := copySed(io.MultiWriter(writers...), conn,
 				0x0A, pattern, replace); err != nil {
